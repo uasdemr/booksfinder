@@ -1,18 +1,20 @@
 import { fetchBooksAction } from './api-action'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { AppState } from '../types/book'
 
-const initialState = {
+const initialState: AppState = {
   books: [],
   isLoading: false,
-  currentPage: 0
+  startIndex: 0,
+  maxResults: 30,
 }
 
 const booksSlice = createSlice({
   name: 'books',
   initialState,
   reducers: {
-    setCurrentPage(state, action) {
-      state.currentPage = action.payload
+    setStartIndex(state) {
+      state.startIndex += 30
     },
   },
   extraReducers: (builder) => {
@@ -22,14 +24,14 @@ const booksSlice = createSlice({
       })
       .addCase(fetchBooksAction.fulfilled, (state, action) => {
         state.isLoading = false
-        console.log(action);
+        console.log(action.payload);
 
       })
   }
 })
 
 export const {
-  setCurrentPage
+  setStartIndex
 } = booksSlice.actions
 
 export default booksSlice.reducer

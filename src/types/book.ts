@@ -90,3 +90,10 @@ export type Book = {
     "textSnippet": string
   }
 }
+
+export type AppState = {
+  books: Book[],
+  isLoading: boolean,
+  startIndex: number,
+  maxResults: number,
+}

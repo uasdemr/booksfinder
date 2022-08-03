@@ -3,8 +3,12 @@ import { fetchBooksAction } from '../../stote/api-action'
 import { useState } from 'react'
 import { NavLink, useSearchParams, useLocation } from 'react-router-dom'
 import styless from './Header.module.scss'
+import { useAppSelector } from '../../hooks/hooks'
 
 const Header = () => {
+  const startIndex = useAppSelector(state => state.books.startIndex)
+  const maxResults = useAppSelector(state => state.books.maxResults)
+
   const [q, setSearch] = useState('')
   const [category, setCategory] = useState('all')
   const [sort, setSort] = useState('relevance')
@@ -14,8 +18,8 @@ const Header = () => {
   const onSearchKeyPressHandler = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === 'Enter') {
       evt.preventDefault()
-      setSearchParams({ q, 'category': category, 'orderBy': sort })
-      store.dispatch(fetchBooksAction({ q, category, sort }))
+      setSearchParams({ q, 'category': category, 'orderBy': sort, startIndex: String(startIndex), maxResults: String(maxResults) })
+      store.dispatch(fetchBooksAction({ q, category, sort, startIndex: String(startIndex), maxResults: String(maxResults) }))
     }
   }
 
