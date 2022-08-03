@@ -2,14 +2,17 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Book } from "../types/book";
 import { api } from "./store";
 
+type FetchBooksType = {
+  q: string,
+  category: string,
+  sort: string
+}
 
-export const fetchBooks = createAsyncThunk(
-  'app/fetchLittleData',
-  // тут будут параметры запроса, введённые и выбранные пользователем на страничке
-  async () => {
+export const fetchBooksAction = createAsyncThunk(
+  'app/fetchBooks',
+  async ({q, category, sort}: FetchBooksType) => {
     try {
-      // запилить строку запроса. Передавать в эту санку параметры запроса, которые выбрал пользователь
-      const { data } = await api.get<Book>(`?q=собаки+subject:medical`);
+      const { data } = await api.get<Book>(`/?q=${q}+subject:${category}&orderBy=${sort}`);
       return data
     } catch (error) {
       // errorHandle(error)

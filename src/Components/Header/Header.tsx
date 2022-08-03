@@ -1,7 +1,24 @@
-import { NavLink } from 'react-router-dom'
+import { store } from '../../stote/store'
+import { fetchBooksAction } from '../../stote/api-action'
+import { useState } from 'react'
+import { NavLink, useSearchParams, useLocation } from 'react-router-dom'
 import styless from './Header.module.scss'
 
 const Header = () => {
+  const [q, setSearch] = useState('')
+  const [category, setCategory] = useState('all')
+  const [sort, setSort] = useState('relevance')
+
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const onSearchKeyPressHandler = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+    if (evt.key === 'Enter') {
+      evt.preventDefault()
+      setSearchParams({ q, 'category': category, 'orderBy': sort })
+      store.dispatch(fetchBooksAction({ q, category, sort }))
+    }
+  }
+
   return (
     <header className={styless.header + ' container'}>
       <div>
@@ -12,14 +29,28 @@ const Header = () => {
         </h1>
         <form action="">
           <div className="input-group mb-3">
-            <input type="text" className="form-control" placeholder="Search..." aria-label="Username" aria-describedby="basic-addon1" />
+            <input
+              onKeyDown={onSearchKeyPressHandler}
+              onChange={evt => setSearch(evt.currentTarget.value)}
+              value={q}
+              type="text"
+              className="form-control"
+              placeholder="Search..."
+              aria-label="Find"
+              aria-describedby="basic-addon1"
+            />
             <span className="input-group-text" id="basic-addon1">@</span>
           </div>
           <div className="row">
             <div className="col">
               <div className="input-group mb-3">
                 <label className="input-group-text">Categories</label>
-                <select className="form-select" name="categories">
+                <select
+                  onChange={evt => setCategory(evt.currentTarget.value)}
+                  value={category}
+                  className="form-select"
+                  name="categories"
+                >
                   <option value="all">All</option>
                   <option value="art">Art</option>
                   <option value="biography">Biography</option>
@@ -33,9 +64,14 @@ const Header = () => {
             <div className="col">
               <div className="input-group mb-3">
                 <label className="input-group-text">Sorting by</label>
-                <select className="form-select" name="sorting">
-                  <option value="relevance ">Relevance </option>
-                  <option value="newest ">Newest </option>
+                <select
+                  onChange={evt => setSort(evt.currentTarget.value)}
+                  value={sort}
+                  className="form-select"
+                  name="sorting"
+                >
+                  <option value="relevance">Relevance </option>
+                  <option value="newest">Newest </option>
                 </select>
               </div>
             </div>

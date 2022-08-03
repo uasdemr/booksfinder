@@ -1,28 +1,35 @@
+import { fetchBooksAction } from './api-action'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { fetchBooks } from './api-action'
 
-const initialState = {}
+const initialState = {
+  books: [],
+  isLoading: false,
+  currentPage: 0
+}
 
 const booksSlice = createSlice({
   name: 'books',
   initialState,
   reducers: {
     setCurrentPage(state, action) {
-      // state.currentPage = action.payload
+      state.currentPage = action.payload
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchBooks.pending, (state) => {
-
+      .addCase(fetchBooksAction.pending, (state) => {
+        state.isLoading = true
       })
-      .addCase(fetchBooks.fulfilled, (state, action) => {
+      .addCase(fetchBooksAction.fulfilled, (state, action) => {
+        state.isLoading = false
+        console.log(action);
 
       })
   }
 })
 
 export const {
-
+  setCurrentPage
 } = booksSlice.actions
+
 export default booksSlice.reducer
