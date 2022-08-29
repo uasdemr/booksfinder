@@ -1,37 +1,70 @@
-import styless from './Item.module.scss'
-import book from './fomm.jpg'
-import { NavLink, useParams } from 'react-router-dom'
-import classNames from 'classnames';
-import { Categories } from '../Categories/Categories';
+import { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom'
+import store from '../../store/store';
+import { fetchBookAction } from '../../store/api-action';
 
-const Item = () => {
-  let { bookId } = useParams();
+import { Img } from '../../UI/Img/Img';
+import { Text } from '../../UI/Text';
+import { MyTooltip } from '../../UI/Tooltip/MyTooltip';
+import { makeText } from '../../util';
+import { ItemProps } from '../../types/book';
+
+const Item = ({ book, isHorizontal}: ItemProps) => {
+  const onImgClick = () => {
+    store.dispatch(fetchBookAction({ id: book.id }))
+  }
+
+  const [category, setCategory] = useState<string | string[] | undefined>('')
+  const [title, setTitle] = useState<string | string[] | undefined>('')
+  const [authors, setAuthors] = useState<string | string[] | undefined>('')
+  const [description, setDescription] = useState<string | string[] | undefined>('')
+
+  useEffect(() => {
+    if(isHorizontal) {
+      setCategory(makeText(book.volumeInfo.categories, null, 'category'))
+      setTitle(makeText(book.volumeInfo.title, null, 'title'))
+      setAuthors(makeText(book.volumeInfo.authors, null, 'author'))
+      setDescription(makeText(book.volumeInfo.description, 210, 'description'))
+
+    } else {
+      setCategory(makeText(book.volumeInfo.categories, 13, 'category'))
+      setTitle(makeText(book.volumeInfo.title, 12, 'title'))
+      setAuthors(makeText(book.volumeInfo.authors, 13, 'author'))
+
+    }
+  }, [book, isHorizontal])
+
   return (
-    <article className={classNames({
-      ["col-8 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4"]: !bookId,
-      ["col-md-12"]: bookId,
-    })}>
-      <div className={classNames("card border-0 justify-content-center bg-light", {
-        ["flex-row bg-white"]: bookId
-      })}>
-        <div className={classNames("img-wrapper text-center pt-5 pb-5", {
-          ["bg-light"]: bookId
-        })}>
-          {bookId ?
-            <img src={book} className={"card-img-top w-75"} alt="..." />
-            : <NavLink
-              className="text-decoration-none text-black"
-              to={'123'}
-            >
-              <img src={book} className={"card-img-top w-75"} alt="..." />
-            </NavLink>
-          }
+    <article className={"col-12 col-sm-4 col-md-3 col-lg-2 col-xl-2 mb-4"}>
+      <div className={`card card-body border-0  bg-light flex-row flex-sm-column`}>
+        <div
+          className={`d-flex justify-content-sm-center flex-shrink-0 pb-1`}
+        >
+          {/* Разобраться с размерами картинки и дизайном карточки*/}
+          <NavLink
+            onClick={() => { onImgClick() }}
+            to={book.id}
+          >
+            <Img
+              src={book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : ''}
+              alt={book.volumeInfo.title}
+              shadow
+            />
+          </NavLink>
         </div>
-        <div className="card-body">
-          <Categories />
-          <h5 className="card-title">Card title</h5>
-          <p className="card-text">Autho name</p>
-          <p className="card-text">Description</p>
+        <div className={`ms-3 ms-sm-0 mt-sm-2`}>
+          <MyTooltip title={book.volumeInfo.categories}>
+            <Text text={category} underline />
+          </MyTooltip>
+          <MyTooltip title={book.volumeInfo.title}>
+            <Text text={title} bold />
+          </MyTooltip>
+          <MyTooltip title={book.volumeInfo.authors}>
+            <Text text={authors} />
+          </MyTooltip>
+          {isHorizontal && <MyTooltip title={book.volumeInfo.description}>
+            <Text text={description} />
+          </MyTooltip>}
         </div>
       </div>
     </article>

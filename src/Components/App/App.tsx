@@ -1,16 +1,16 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ItemCard } from '../ItemCard/ItemCard';
-import { ItemList } from '../ItemList';
 import { Layout } from '../Layout';
+import { ItemCard } from '../../Pages/ItemCard/ItemCard';
+import { MainPage } from '../../Pages/Main';
 import './App.css';
-// import styless from './App.module.scss'
 
 const App = () => {
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<ItemList />} />
+          <Route index element={<MainPage />} />
           <Route path=":bookId" element={<ItemCard />} />
         </Route>
       </Routes>

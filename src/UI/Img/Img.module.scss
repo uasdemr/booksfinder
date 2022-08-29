@@ -1,0 +1,26 @@
+.shadow {
+  box-shadow: 8px 8px 8px 0px rgba(34, 60, 80, 0.3)
+}
+
+.thumbnail {
+  padding: 0.25rem;
+  background-color: #fff;
+  border: 1pxsolidvar(--bs-border-color);
+  border-radius: 0.375rem;
+  max-width: 100%;
+}
+
+.img_card {
+  width: 100px;
+  height: 150px;
+
+  @media (max-width: 575px)  {
+    width: 150px;
+    height: auto;
+  }
+
+  // @media (min-width: 768px) and (max-width: 991px) {
+  //   width: 170px;
+  //   height: auto;
+  // }
+}

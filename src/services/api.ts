@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from 'axios';
-// https://www.googleapis.com/books/v1/volumes?q=собаки+subject:medical
 const BACKEND_URL = 'https://www.googleapis.com/books/v1/volumes'
 const REQUEST_TIMEOUT = 10000;
 

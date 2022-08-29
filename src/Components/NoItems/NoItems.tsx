@@ -1,6 +1,8 @@
 const NoItems = () => {
   return (
-    <div>No Items here</div>
+    <div className="d-flex justify-content-center pt-5 pb-5">
+      <h1 className="h-50">No Items here</h1>
+    </div>
   )
 }
 

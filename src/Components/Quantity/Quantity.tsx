@@ -1,7 +1,20 @@
+import cn from 'classnames'
 
-const Quantity = () => {
+type QuantityProps = {
+  totalItems: number,
+  align?: string,
+  size?: number,
+}
+
+const Quantity = ({ totalItems, align = 'center', size=6 }: QuantityProps) => {
   return (
-    <p className="text-center">Found 446 results</p>
+    <p className={
+      cn(
+        {[`text-${align}`]: align},
+        {[`fs-${size}`]: size}
+        )
+    }
+    >Found {totalItems} results</p>
   )
 }
 

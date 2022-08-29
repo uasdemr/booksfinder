@@ -1,83 +1,119 @@
-import { store } from '../../stote/store'
-import { fetchBooksAction } from '../../stote/api-action'
-import { useState } from 'react'
-import { NavLink, useSearchParams, useLocation } from 'react-router-dom'
-import styless from './Header.module.scss'
+import store from '../../store/store'
+import { initialSearch } from '../../store/api-action'
+import { clearStore, setCategory, setOrderBy, setUserFind } from '../../store/books-slice'
+import { useSearchParams } from 'react-router-dom'
+import { Input } from '../../UI/Input'
+import { InputGroup } from '../../UI/InputGroup'
+import { Button } from '../../UI/Button'
+import { DropDown } from '../../UI/DropDown/DropDown'
 import { useAppSelector } from '../../hooks/hooks'
 
+import styless from './Header.module.scss'
+import cn from 'classnames'
+
 const Header = () => {
-  const startIndex = useAppSelector(state => state.books.startIndex)
-  const maxResults = useAppSelector(state => state.books.maxResults)
 
-  const [q, setSearch] = useState('')
-  const [category, setCategory] = useState('all')
-  const [sort, setSort] = useState('relevance')
+  const maxResults = useAppSelector(state => state.books.books.maxResults)
+  const orderBy = useAppSelector(state => state.books.books.orderBy)
+  const category = useAppSelector(state => state.books.books.category)
+  const startIndex = useAppSelector(state => state.books.books.startIndex)
+  const q = useAppSelector(state => state.books.books.userFind)
 
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams('')
 
-  const onSearchKeyPressHandler = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+  const onSearchEnterPressHandler = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === 'Enter') {
       evt.preventDefault()
-      setSearchParams({ q, 'category': category, 'orderBy': sort, startIndex: String(startIndex), maxResults: String(maxResults) })
-      store.dispatch(fetchBooksAction({ q, category, sort, startIndex: String(startIndex), maxResults: String(maxResults) }))
+      if (q) {
+        setSearchParams({ q: q.trim(), 'category': category, 'orderBy': orderBy, startIndex: String(startIndex), maxResults: String(maxResults) })
+        store.dispatch(initialSearch({ q, category, orderBy, startIndex: String(startIndex), maxResults: String(maxResults) }))
+      }
     }
   }
 
+  const onSearchChangeHandler = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+    store.dispatch(setUserFind(evt.currentTarget.value))
+  }
+
+  const onSearchButtonClickhandler = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    if (q) {
+      setSearchParams({ q: q.trim(), 'category': category, 'orderBy': orderBy, startIndex: String(startIndex), maxResults: String(maxResults) })
+      store.dispatch(initialSearch({ q, category, orderBy, startIndex: String(startIndex), maxResults: String(maxResults) }))
+    }
+  }
+
+  const onClearButtonClickhandler = () => {
+    setSearchParams({})
+    store.dispatch(clearStore())
+  }
+
   return (
-    <header className={styless.header + ' container'}>
+    <header className={cn('container sticky-top', `${styless.header}`)}>
       <div>
-        <h1 className="text-center">
-          <NavLink className="text-decoration-none text-white" to={'/'}>
-            Search for books
-          </NavLink>
+        <h1 className="text-center text-white">
+          Search for books
         </h1>
-        <form action="">
-          <div className="input-group mb-3">
-            <input
-              onKeyDown={onSearchKeyPressHandler}
-              onChange={evt => setSearch(evt.currentTarget.value)}
+        <form action="" onSubmit={evt => evt.preventDefault()}>
+          <InputGroup className="mb-3 position-relative">
+            <Input
+              className="form-control border-0 outline-0"
+              placeholder='Search...'
+              onKeyDown={onSearchEnterPressHandler}
+              onChange={onSearchChangeHandler}
               value={q}
-              type="text"
-              className="form-control"
-              placeholder="Search..."
-              aria-label="Find"
-              aria-describedby="basic-addon1"
             />
-            <span className="input-group-text" id="basic-addon1">@</span>
-          </div>
+            <Button
+              className="input-group-text bg-white"
+              onClick={onClearButtonClickhandler}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+              </svg>
+            </Button>
+            <Button
+              className="input-group-text bg-white"
+              onClick={onSearchButtonClickhandler}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+              </svg>
+            </Button>
+          </InputGroup>
           <div className="row">
-            <div className="col">
-              <div className="input-group mb-3">
-                <label className="input-group-text">Categories</label>
-                <select
-                  onChange={evt => setCategory(evt.currentTarget.value)}
+            <div className="col mb-3">
+              <InputGroup title='Categories'>
+                <DropDown
+                  className='form-select'
                   value={category}
-                  className="form-select"
-                  name="categories"
-                >
-                  <option value="all">All</option>
-                  <option value="art">Art</option>
-                  <option value="biography">Biography</option>
-                  <option value="computers">Computers</option>
-                  <option value="history">History</option>
-                  <option value="medical">Medical</option>
-                  <option value="poetry">Poetry</option>
-                </select>
-              </div>
+                  name='categories'
+                  onChange={evt => {
+                    store.dispatch(setCategory(evt.currentTarget.value))
+                  }}
+                  options={[
+                    { value: 'all', title: 'All' },
+                    { value: 'art', title: 'Art' },
+                    { value: 'biography', title: 'Biography' },
+                    { value: 'computers', title: 'Computers' },
+                    { value: 'history', title: 'History' },
+                    { value: 'medical', title: 'Medical' },
+                    { value: 'poetry', title: 'Poetry' }
+                  ]}
+                />
+              </InputGroup>
             </div>
             <div className="col">
-              <div className="input-group mb-3">
-                <label className="input-group-text">Sorting by</label>
-                <select
-                  onChange={evt => setSort(evt.currentTarget.value)}
-                  value={sort}
-                  className="form-select"
-                  name="sorting"
-                >
-                  <option value="relevance">Relevance </option>
-                  <option value="newest">Newest </option>
-                </select>
-              </div>
+              <InputGroup title='Sorting by'>
+                <DropDown
+                  value={orderBy}
+                  className='form-select'
+                  name='sorting'
+                  onChange={evt => store.dispatch(setOrderBy(evt.currentTarget.value))}
+                  options={[
+                    { value: 'relevance', title: 'Relevance' },
+                    { value: 'newest', title: 'Newest' },
+                  ]}
+                />
+              </InputGroup>
             </div>
           </div>
         </form>
