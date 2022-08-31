@@ -1,7 +1,7 @@
 
 const NoImage = () => {
   return (
-    <img src="../" alt="" />
+    <img src="../" alt="No image present" />
   )
 }
 

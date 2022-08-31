@@ -65,7 +65,6 @@ const booksSlice = createSlice({
       state.scrollY = initialState.scrollY
       state.orderBy = initialState.orderBy
       state.category = initialState.category
-      // state.gapiKey = initialState.gapiKey
     }
   },
   extraReducers: (builder) => {

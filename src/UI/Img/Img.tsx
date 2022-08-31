@@ -11,7 +11,6 @@ const Img = ({ src = '', alt, shadow }: ImgProps) => {
   const imgSrc = src ? src : '../../../img/no-image.jpg'
   return (
     <>
-      {/* Переделать компонент под использование классов и madia запросы */}
       <img
         src={imgSrc}
         className={cn(styles.img_card, styles.thumbnail, { [styles.shadow]: shadow })}

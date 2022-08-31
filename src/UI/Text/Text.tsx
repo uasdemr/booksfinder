@@ -18,9 +18,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({ text, size, underline, b
       className={cn('card-text mb-2', className, {
         'text-decoration-underline': underline,
         'fw-semibold': bold,
-      },
-        // {[`color: ${color}`]: color}
-      )}
+      })}
     >
       {text}
     </p >

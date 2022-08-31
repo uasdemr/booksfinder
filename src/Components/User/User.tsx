@@ -1,12 +1,12 @@
 import { useState } from "react"
-import cn from 'classnames'
-import { Button } from "../../UI/Button"
-import { ButtonGroup } from "../../UI/ButtonGroup"
-import styles from './User.module.scss'
-import { Text } from "../../UI/Text"
 import store from "../../store/store"
 import { unSetGapiKey } from "../../store/books-slice"
+import { Button } from "../../UI/Button"
+import { ButtonGroup } from "../../UI/ButtonGroup"
+import { Text } from "../../UI/Text"
 import { Input } from "../../UI/Input"
+import styles from './User.module.scss'
+import cn from 'classnames'
 
 type UserPropType = {
   apiKey: string

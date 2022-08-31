@@ -9,7 +9,7 @@ const ItemCard = () => {
   const openBook = useAppSelector(state => state.books.books.openBook)
 
   function createMarkup(tagsString: string) {
-    return {__html: tagsString}
+    return { __html: tagsString }
   }
 
   return (
@@ -21,7 +21,6 @@ const ItemCard = () => {
             alt={openBook.volumeInfo.title}
           />
         </div>
-        {/* Запилить компоненту Текста настраиваемый цвет, что бы он мог быть посерее немного основного */}
         <div className="card-body p-3 pb-0">
           <Text text={makeText(openBook.volumeInfo.categories, null, 'category')} />
           <Text bold text={makeText(openBook.volumeInfo.title, null, 'title')} />

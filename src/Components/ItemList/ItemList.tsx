@@ -1,4 +1,3 @@
-import React from 'react'
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks/hooks";
 import { useDocumentWidth } from "../../hooks/useDocumentWidth"

@@ -10,14 +10,15 @@ import { makeText } from '../../util';
 import { ItemProps } from '../../types/book';
 
 const ListItem = ({ book, isHorizontal }: ItemProps) => {
-  const onImgClick = () => {
-    store.dispatch(fetchBookAction({ id: book.id }))
-  }
 
   const [category, setCategory] = useState<string | string[] | undefined>('')
   const [title, setTitle] = useState<string | string[] | undefined>('')
   const [authors, setAuthors] = useState<string | string[] | undefined>('')
   const [description, setDescription] = useState<string | string[] | undefined>('')
+
+  const onImgClick = () => {
+    store.dispatch(fetchBookAction({ id: book.id }))
+  }
 
   useEffect(() => {
     if (isHorizontal) {
