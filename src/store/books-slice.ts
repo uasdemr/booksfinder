@@ -78,6 +78,8 @@ const booksSlice = createSlice({
           state.books = []
           state.books = uniqBy(data.items, 'id')
           state.totalItems = data.totalItems
+          state.startIndex = initialState.startIndex
+          state.scrollY = initialState.scrollY
           state.isLoading = false
         }
       })

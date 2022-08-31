@@ -11,6 +11,7 @@ import { useAppSelector } from '../../hooks/hooks'
 import styless from './Header.module.scss'
 import cn from 'classnames'
 import { Profile } from '../Profile/Profile'
+import { INITIAL_SEARCH_START_INDEX } from '../../const'
 
 const Header = () => {
 
@@ -39,27 +40,23 @@ const Header = () => {
       startIndex: String(startIndex),
       maxResults: String(maxResults),
     }
-
     if (key) {
       queryObject.key = key
     }
-
     return queryObject
   }
+
 
   const onSearchEnterPressHandler = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === 'Enter') {
       evt.preventDefault()
       if (q) {
-        const query = makeParamsQuery(q, category, orderBy, startIndex, maxResults, apiKey)
+        const query = makeParamsQuery(q, category, orderBy, INITIAL_SEARCH_START_INDEX, maxResults, apiKey)
+        debugger
         setSearchParams(query)
-        store.dispatch(initialSearch({ q, category, orderBy, startIndex: String(startIndex), maxResults: String(maxResults), apiKey }))
+        store.dispatch(initialSearch({ q, category, orderBy, startIndex: String(INITIAL_SEARCH_START_INDEX), maxResults: String(maxResults), apiKey }))
       }
     }
-  }
-
-  const onSearchChangeHandler = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-    store.dispatch(setUserFind(evt.currentTarget.value))
   }
 
   const onSearchButtonClickhandler = (evt: React.MouseEvent<HTMLButtonElement>) => {
@@ -68,6 +65,11 @@ const Header = () => {
       store.dispatch(initialSearch({ q, category, orderBy, startIndex: String(startIndex), maxResults: String(maxResults) }))
     }
   }
+
+  const onSearchChangeHandler = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+    store.dispatch(setUserFind(evt.currentTarget.value))
+  }
+
 
   const onClearButtonClickhandler = () => {
     setSearchParams({})

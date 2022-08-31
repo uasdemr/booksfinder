@@ -167,3 +167,5 @@ export enum HTTP_CODE {
   UNAUTHORIZED = 401,
   NOT_FOUND = 404,
 }
+
+export const INITIAL_SEARCH_START_INDEX = 0
