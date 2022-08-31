@@ -15,9 +15,6 @@ export const errorHandle = (error: ErrorType): void => {
       case HTTP_CODE.BAD_REQUEST:
         toast.error(response.data.error.message);
         break;
-      case HTTP_CODE.UNAUTHORIZED:
-        toast.error(response.data.error.message);
-        break;
       case HTTP_CODE.NOT_FOUND:
         toast.info(response.data.error.message);
         break;

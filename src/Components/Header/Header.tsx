@@ -10,6 +10,7 @@ import { useAppSelector } from '../../hooks/hooks'
 
 import styless from './Header.module.scss'
 import cn from 'classnames'
+import { Profile } from '../Profile/Profile'
 
 const Header = () => {
 
@@ -17,16 +18,42 @@ const Header = () => {
   const orderBy = useAppSelector(state => state.books.books.orderBy)
   const category = useAppSelector(state => state.books.books.category)
   const startIndex = useAppSelector(state => state.books.books.startIndex)
+  const apiKey = useAppSelector(state => state.books.books.gapiKey)
+
   const q = useAppSelector(state => state.books.books.userFind)
 
   const [searchParams, setSearchParams] = useSearchParams('')
+
+  const makeParamsQuery = (q: string, category: string, orderBy: string, startIndex: number, maxResults: number, key: string) => {
+    const queryObject: {
+      q: string,
+      category: string,
+      orderBy: string,
+      startIndex: string,
+      maxResults: string,
+      key?: string
+    } = {
+      q: q.trim(),
+      category,
+      orderBy,
+      startIndex: String(startIndex),
+      maxResults: String(maxResults),
+    }
+
+    if (key) {
+      queryObject.key = key
+    }
+
+    return queryObject
+  }
 
   const onSearchEnterPressHandler = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === 'Enter') {
       evt.preventDefault()
       if (q) {
-        setSearchParams({ q: q.trim(), 'category': category, 'orderBy': orderBy, startIndex: String(startIndex), maxResults: String(maxResults) })
-        store.dispatch(initialSearch({ q, category, orderBy, startIndex: String(startIndex), maxResults: String(maxResults) }))
+        const query = makeParamsQuery(q, category, orderBy, startIndex, maxResults, apiKey)
+        setSearchParams(query)
+        store.dispatch(initialSearch({ q, category, orderBy, startIndex: String(startIndex), maxResults: String(maxResults), apiKey }))
       }
     }
   }
@@ -50,6 +77,7 @@ const Header = () => {
   return (
     <header className={cn('container sticky-top', `${styless.header}`)}>
       <div>
+        <Profile apiKey={apiKey} />
         <h1 className="text-center text-white">
           Search for books
         </h1>

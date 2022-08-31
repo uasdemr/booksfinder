@@ -1,3 +1,17 @@
+import { FetchBooksPropsType } from "./types/book"
+
+
+export const makeQueryString = ({ q, category, orderBy, startIndex, maxResults, apiKey='' }: FetchBooksPropsType): string => {
+  let queryString = `/?q=${q.trim()}`
+
+  category !== 'all' ? queryString += `+subject:${category}&orderBy=${orderBy}&startIndex=${startIndex}&maxResults=${maxResults}`
+    : queryString += `&orderBy=${orderBy}&startIndex=${startIndex}&maxResults=${maxResults}`
+
+    queryString += apiKey ? `&key=${apiKey}` : ''
+
+  return queryString
+}
+
 export const stringFromArr = (arr: string[] = []) => {
   if (!Array.isArray(arr)) return ''
   if (Array.isArray(arr)) {

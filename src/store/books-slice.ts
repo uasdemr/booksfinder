@@ -16,12 +16,19 @@ const initialState: AppState = {
   openBook: defaulCard2,
   scrollY: 0,
   innerWindow: 0,
+  gapiKey: '',
 }
 
 const booksSlice = createSlice({
   name: 'books',
   initialState,
   reducers: {
+    unSetGapiKey(state) {
+      state.gapiKey = initialState.gapiKey
+    },
+    setGapiKey(state, action) {
+      state.gapiKey = action.payload
+    },
     setIsLoadingFalse(state) {
       state.isLoading = false
     },
@@ -58,6 +65,7 @@ const booksSlice = createSlice({
       state.scrollY = initialState.scrollY
       state.orderBy = initialState.orderBy
       state.category = initialState.category
+      // state.gapiKey = initialState.gapiKey
     }
   },
   extraReducers: (builder) => {
@@ -106,6 +114,8 @@ export const {
   setCategory,
   setIsLoadingFalse,
   setInnerWindow,
+  setGapiKey,
+  unSetGapiKey,
 } = booksSlice.actions
 
 export default booksSlice.reducer

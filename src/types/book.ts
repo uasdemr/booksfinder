@@ -10,6 +10,25 @@ export type ItemListProps = {
   NoItems: () => JSX.Element
 }
 
+export type FetchBooksPropsType = {
+  q: string,
+  category: string,
+  orderBy: string,
+  startIndex: string,
+  maxResults: string,
+  apiKey?: string
+}
+
+export type FetchBookPropsType = {
+  id: string
+}
+
+export type GetBooksType = {
+  items: Book[],
+  kind: string,
+  totalItems: number,
+}
+
 export type Book = {
   "kind": string,
   "id": string,
@@ -187,4 +206,5 @@ export type AppState = {
   openBook: OneBook,
   scrollY: number,
   innerWindow: number,
+  gapiKey: string,
 }

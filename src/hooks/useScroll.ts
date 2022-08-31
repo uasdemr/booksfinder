@@ -14,7 +14,7 @@ const useScroll = () => {
 
   const onScroll = useCallback(() => {
     updateValue()
-  }, []);
+  }, [updateValue]);
 
 
   useEffect(() => {

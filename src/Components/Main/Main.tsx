@@ -1,9 +1,10 @@
+import React from 'react'
 import { useState, useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 import store from "../../store/store"
 import { ItemList } from "../ItemList"
 import { Quantity } from "../Quantity"
-import { Item } from "../Item"
+import { ListItem } from "../Item"
 import { NoItems } from "../NoItems"
 import { ArrowUp } from "../ArrowUp/ArrowUp"
 import { showMore } from "../../store/api-action"
@@ -43,7 +44,7 @@ const Main = () => {
     } else {
       setArrowVisible(false)
     }
-  }, [scrollY])
+  }, [scrollY, setAppScroll])
 
   useEffect(() => {
     if (scrollY > 1500) {
@@ -55,18 +56,14 @@ const Main = () => {
 
   return (
     <>
-      {/* <section
-        className="container mt-3 mb-3 d-flex flex-column justify-content-between position-relative"
-      > */}
-        <Quantity totalItems={totalItems} align='end' />
-        <ItemList data={books} Item={Item} NoItems={NoItems} isLoading={isLoading} />
-        <ButtonGroup>
-          <Button className="btn btn-primary" onClick={buttonClickHandler}>
-            Show more
-          </Button>
-        </ButtonGroup>
-        <ArrowUp visible={arrowVisible} />
-      {/* </section> */}
+      <Quantity totalItems={totalItems} align='end' />
+      <ItemList data={books} Item={ListItem} NoItems={NoItems} isLoading={isLoading} />
+      <ButtonGroup>
+        <Button className="btn btn-primary" onClick={buttonClickHandler}>
+          Show more
+        </Button>
+      </ButtonGroup>
+      <ArrowUp visible={arrowVisible} />
     </>
   )
 }

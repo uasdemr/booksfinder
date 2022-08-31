@@ -9,7 +9,7 @@ import { MyTooltip } from '../../UI/Tooltip/MyTooltip';
 import { makeText } from '../../util';
 import { ItemProps } from '../../types/book';
 
-const Item = ({ book, isHorizontal}: ItemProps) => {
+const ListItem = ({ book, isHorizontal }: ItemProps) => {
   const onImgClick = () => {
     store.dispatch(fetchBookAction({ id: book.id }))
   }
@@ -20,7 +20,7 @@ const Item = ({ book, isHorizontal}: ItemProps) => {
   const [description, setDescription] = useState<string | string[] | undefined>('')
 
   useEffect(() => {
-    if(isHorizontal) {
+    if (isHorizontal) {
       setCategory(makeText(book.volumeInfo.categories, null, 'category'))
       setTitle(makeText(book.volumeInfo.title, null, 'title'))
       setAuthors(makeText(book.volumeInfo.authors, null, 'author'))
@@ -40,7 +40,6 @@ const Item = ({ book, isHorizontal}: ItemProps) => {
         <div
           className={`d-flex justify-content-sm-center flex-shrink-0 pb-1`}
         >
-          {/* Разобраться с размерами картинки и дизайном карточки*/}
           <NavLink
             onClick={() => { onImgClick() }}
             to={book.id}
@@ -71,4 +70,4 @@ const Item = ({ book, isHorizontal}: ItemProps) => {
   )
 }
 
-export { Item }
+export { ListItem }

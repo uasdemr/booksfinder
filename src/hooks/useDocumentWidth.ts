@@ -11,7 +11,7 @@ const useDocumentWidth = () => {
 
   const onResize = useCallback(() => {
     updateValue()
-  }, []);
+  }, [updateValue]);
 
 
   useEffect(() => {

@@ -1,42 +1,15 @@
-import { Book, OneBook } from "../types/book";
+import { FetchBookPropsType, FetchBooksPropsType, GetBooksType, OneBook } from "../types/book";
 import store, { api } from "./store";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setIsLoadingFalse } from "./books-slice";
 import { ErrorType } from "../types/error";
 import { errorHandle } from "../services/error-handle";
-
-type FetchBooksPropsType = {
-  q: string,
-  category: string,
-  orderBy: string,
-  startIndex: string,
-  maxResults: string,
-}
-
-type FetchBookPropsType = {
-  id: string
-}
-
-type GetBooksType = {
-  items: Book[],
-  kind: string,
-  totalItems: number,
-}
-
-
-const makeQueryString = ({ q, category, orderBy, startIndex, maxResults }: FetchBooksPropsType): string => {
-  let queryString = `/?q=${q.trim()}`
-
-  category !== 'all' ? queryString += `+subject:${category}&orderBy=${orderBy}&startIndex=${startIndex}&maxResults=${maxResults}`
-    : queryString += `&orderBy=${orderBy}&startIndex=${startIndex}&maxResults=${maxResults}`
-
-  return queryString
-}
+import { makeQueryString } from "../util";
 
 export const initialSearch = createAsyncThunk(
   'app/fetchBooks',
-  async ({ q, category, orderBy, startIndex, maxResults }: FetchBooksPropsType) => {
-    const queryString = makeQueryString({ q, category, orderBy, startIndex, maxResults })
+  async ({ q, category, orderBy, startIndex, maxResults, apiKey }: FetchBooksPropsType) => {
+    const queryString = makeQueryString({ q, category, orderBy, startIndex, maxResults, apiKey })
     try {
       const { data } = await api.get<GetBooksType>(queryString);
       return { data }

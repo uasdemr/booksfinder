@@ -4,7 +4,7 @@ import cn from 'classnames'
 type ButtonGroupPropsType = {
   className?: string,
   vertical?: boolean,
-  size?: string,
+  size?: 'lg' | 'sm',
 }
 
 const ButtonGroup: React.FC<PropsWithChildren<ButtonGroupPropsType>> = ({ className, children, vertical, size }) => {
